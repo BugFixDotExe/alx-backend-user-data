@@ -26,6 +26,6 @@ def filter_datum(
             A string with the redaction take
     '''
     for field in fields:
-        pattern = fr'({field}=)([^{separator}]*?){separator}'
+        pattern = fr'({field}=)([^;]*?);'
         message = re.sub(pattern, fr'\1{redaction}{separator}', message)
     return message
