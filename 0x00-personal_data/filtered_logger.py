@@ -9,7 +9,11 @@ import re
 import logging
 
 
-def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> str:
+def filter_datum(
+                fields: List[str],
+                redaction: str,
+                message: str,
+                separator: str):
     '''
         filter_datum: a function that returns a new string with
         it's to be redacted part, redacted
@@ -21,5 +25,7 @@ def filter_datum(fields: List[str], redaction: str, message: str, separator: str
         Returns:
             A string with the redaction take
     '''
-    pattern = '|'.join([fr'({field}=)([^;]*?)' for field in fields])
-    return re.sub(pattern, lambda m: f'{m.group(1)}{redaction}', message)
+    for field in fields:
+        pattern = fr'({field}=)([^;]*?);'
+        message = re.sub(pattern, fr'\1{redaction}{separator}', message)
+    return message
