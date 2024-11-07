@@ -6,6 +6,7 @@ obsfuscated.
 '''
 from typing import List
 import re
+import logging
 
 
 def filter_datum(
@@ -24,6 +25,7 @@ def filter_datum(
         Returns:
             A string with the redaction take
     '''
-    pattern = fr'({fields}=)([^;]*?);'
-    matched = re.sub(pattern, fr'\1{redaction}{separator}', message)
-    return matched
+    for field in fields:
+        pattern = fr'({field}=)([^;]*?);'
+        message = re.sub(pattern, fr'\1{redaction}{separator}', message)
+    return message
