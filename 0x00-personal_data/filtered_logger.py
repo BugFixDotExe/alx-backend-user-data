@@ -11,6 +11,5 @@ import logging
 
 def filter_datum(fields: List[str],redaction: str,message: str,separator: str):
     for field in fields:
-        pattern = fr'({field}=)([^;]*?);'
-        message = re.sub(pattern, fr'\1{redaction}{separator}', message)
+        message = re.sub(fr'({field}=)([^;]*?);', fr'\1{redaction}{separator}', message)
     return message
