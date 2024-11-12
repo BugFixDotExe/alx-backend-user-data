@@ -19,7 +19,17 @@ class Auth:
         Returns:
             A boolen for approved or disapproved access
         '''
-        return False
+        if path is None or excluded_paths is None:
+            return True
+        if len(excluded_paths) == 0:
+            return True
+
+        for single_path in excluded_paths:
+            if (path[len(path) - 1] != '/'):
+                path = path + '/'
+            if path == single_path:
+                return False
+            return True
 
     def authorization_header(self, request=None) -> str:
         '''
