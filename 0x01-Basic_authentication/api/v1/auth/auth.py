@@ -19,9 +19,10 @@ class Auth:
         Returns:
             A boolen for approved or disapproved access
         '''
-        if path is None or excluded_paths is None:
+        if path is None:
             return True
-        if len(excluded_paths) == 0:
+
+        if excluded_paths is None or len(excluded_paths) == 0:
             return True
 
         for single_path in excluded_paths:
