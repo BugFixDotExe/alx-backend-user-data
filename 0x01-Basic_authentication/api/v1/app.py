@@ -14,6 +14,10 @@ app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 auth = None
 
+'''
+This is used as a check to know what class
+of authetication should be run
+'''
 if os.getenv("AUTH_TYPE") == "auth":
     from api.v1.auth.auth import Auth
     auth = Auth()
@@ -21,6 +25,14 @@ if os.getenv("AUTH_TYPE") == "auth":
 
 @app.before_request
 def before_request():
+    '''
+    The before_request: This is a function that aims
+    to intercept all incoming request to the server
+    it's main role is to alter what has been specfied
+    by the programmer before further processing
+    Args: None
+    Returns: None
+    '''
     if auth is None:
         return
     isPart = auth.require_auth(
