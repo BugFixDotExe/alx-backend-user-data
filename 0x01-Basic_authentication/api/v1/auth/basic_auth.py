@@ -3,6 +3,7 @@
 A class for managing the API Authentication
 """
 from api.v1.auth.auth import Auth
+from typing import TypeVar
 import base64
 
 
@@ -73,3 +74,20 @@ class BasicAuth(Auth):
             return (None, None)
         username, password = decoded_base64_authorization_header.split(":")
         return (username, password)
+
+    def user_object_from_credentials(
+            self, user_email: str, user_pwd: str) -> TypeVar('User'):
+        '''
+        user_object_from_credentials: a function that returns
+        the User instance based on his email and password.
+        Args:
+            user_email: An email address
+            user_pwd: A user password
+        Returns:
+            User instance based on his email and password.
+        '''
+        if issubclass(type(user_email), str) is False:
+            return None
+        if issubclass(type(user_pwd), str) is False:
+            return None
+        
