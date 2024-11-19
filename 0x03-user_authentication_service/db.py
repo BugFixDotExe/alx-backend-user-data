@@ -5,6 +5,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
 
 from user import Base, User
 
@@ -44,3 +46,38 @@ class DB:
         session.add(new_user)
         session.commit()
         return new_user
+
+    def find_user_by(self, email: str = '', hashed_password: str = '') -> User:
+        """
+            Finds a user by the provided filter criteria.
+
+            Args:
+                email (str, optional): The email of the user to find.
+                Defaults to None.
+                hashed_password (str, optional): The hashed password
+                of the user to find.
+                Defaults to None.
+
+            Returns:
+                User: The User object if found.
+
+            Raises:
+                ValueError: If no filter criteria are provided.
+                NoResultFound: If no user matches the criteria.
+            """
+        if not email and not hashed_password:
+            raise ValueError
+        try:
+            session = self._session
+            filters = {}
+            if email:
+                filters['email'] = email
+            if hashed_password:
+                filters['hashed_password'] = hashed_password
+
+            found_user = session.query(User).filter_by(**filters).one()
+            return found_user
+        except (NoResultFound):
+            raise NoResultFound
+        except(InvalidRequestError):
+            raise InvalidRequestError
