@@ -91,6 +91,8 @@ class DB:
             Raises:
                 ValueError: If no or wrong filter criteria are provided.
             """
+        if self.__session is None:
+            self.__session = self._session
         if type(user_id) is not int:
             raise ValueError
         if not kwargs:
