@@ -66,9 +66,8 @@ class DB:
                 NoResultFound: If no user matches the criteria.
             """
         try:
-            session = self._session
             if kwargs:
-                query = session.query(User).filter_by(**kwargs).one()
+                query = self.__session.query(User).filter_by(**kwargs).one()
                 return query
             else:
                 raise InvalidRequestError
@@ -92,4 +91,11 @@ class DB:
             Raises:
                 ValueError: If no or wrong filter criteria are provided.
             """
-        # matched_user = self.find_user_by(id=user_id)
+        matched_user = self.find_user_by(id=user_id)
+        if not kwargs:
+            raise ValueError
+        for key, value in kwargs.items():
+            if hasattr(matched_user, key):
+                setattr(matched_user, key, value)
+        self.__session.commit()
+        print(matched_user)
