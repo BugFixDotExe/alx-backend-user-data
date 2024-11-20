@@ -68,13 +68,11 @@ class DB:
         try:
             session = self._session
             if kwargs:
-                query = session.query(User)
                 for key, value in kwargs.items():
-                    query = query.filter(getattr(User, key) == value)
-                return query.one()
-        except (NoResultFound):
-            raise NoResultFound
-        except(InvalidRequestError):
-            raise InvalidRequestError
+                    query = session.query(User).filter(
+                        getattr(User, key) == value)
+                if (query.first() is None):
+                    raise NoResultFound
+                return query.first()
         except(AttributeError):
             raise InvalidRequestError
