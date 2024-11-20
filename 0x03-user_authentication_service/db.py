@@ -68,13 +68,28 @@ class DB:
         try:
             session = self._session
             if kwargs:
-                for key, value in kwargs.items():
-                    query = session.query(User).filter(
-                        getattr(User, key) == value)
-                return query.one()
+                query = session.query(User).filter_by(**kwargs).one()
+                return query
             else:
                 raise InvalidRequestError
         except (NoResultFound):
             raise NoResultFound
         except (AttributeError):
             raise InvalidRequestError
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """
+            Finds a user by the provided filter criteria.
+
+            Args:
+                user_id (int): The id of the user to find.
+               kwargs (dict): A dict containing the attr(key)
+               and value to be update in the User class
+
+            Returns:
+                None
+
+            Raises:
+                ValueError: If no or wrong filter criteria are provided.
+            """
+        # matched_user = self.find_user_by(id=user_id)
