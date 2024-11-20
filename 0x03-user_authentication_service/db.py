@@ -66,18 +66,19 @@ class DB:
                 ValueError: If no filter criteria are provided.
                 NoResultFound: If no user matches the criteria.
             """
-        try:
-            if self.__session is None:
-                self.__session = self._session
-            if kwargs:
-                query = self.__session.query(User).filter_by(**kwargs).one()
-                return query
-            else:
+        if self.__session is None:
+            self.__session = self._session
+        query = self.__session.query(User)
+        for key, value in kwargs.items():
+            if not hasattr(User, key):
                 raise InvalidRequestError
-        except (NoResultFound):
+            query = self.__session.query(User).filter(
+                    getattr(User, key) == value)
+        result = query.one_or_none()
+        if result:
+            return result
+        else:
             raise NoResultFound
-        except (AttributeError):
-            raise InvalidRequestError
 
     def update_user(self, user_id: int, **kwargs) -> None:
         """
