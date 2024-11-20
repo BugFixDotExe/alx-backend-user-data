@@ -71,8 +71,8 @@ class DB:
                 for key, value in kwargs.items():
                     query = session.query(User).filter(
                         getattr(User, key) == value)
-                if (query.first() is None):
-                    raise NoResultFound
-                return query.first()
-        except(AttributeError):
+                return query.one()
+        except (NoResultFound):
+            raise NoResultFound
+        except(InvalidRequestError, AttributeError):
             raise InvalidRequestError
