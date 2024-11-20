@@ -95,7 +95,9 @@ class DB:
         if not kwargs:
             raise ValueError
         for key, value in kwargs.items():
-            if hasattr(matched_user, key):
-                setattr(matched_user, key, value)
+            try:
+                if hasattr(matched_user, key):
+                    setattr(matched_user, key, value)
+            except (AttributeError):
+                raise ValueError
         self.__session.commit()
-        print(matched_user)
