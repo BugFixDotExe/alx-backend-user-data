@@ -72,7 +72,9 @@ class DB:
                     query = session.query(User).filter(
                         getattr(User, key) == value)
                 return query.one()
+            else:
+                raise InvalidRequestError
         except (NoResultFound):
             raise NoResultFound
-        except(InvalidRequestError, AttributeError):
+        except (AttributeError):
             raise InvalidRequestError
