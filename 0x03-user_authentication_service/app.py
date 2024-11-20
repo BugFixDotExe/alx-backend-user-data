@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 from flask import Flask, jsonify, request
-from auth import Auth
 
 
-AUTH = Auth()
 app = Flask(__name__)
 
 
@@ -14,6 +12,9 @@ def main():
 
 @app.route('/users', methods=['POST'])
 def users():
+    from auth import Auth
+
+    AUTH = Auth()
     '''
     users: a function when given a form
     will procceed to extract and save
