@@ -41,10 +41,11 @@ class DB:
             Returns:
                 A type of User
             '''
-        session = self._session
+        if self.__session is None:
+            self.__session = self._session
         new_user = User(email=email, hashed_password=hashed_password)
-        session.add(new_user)
-        session.commit()
+        self.__session.add(new_user)
+        self.__session.commit()
         return new_user
 
     def find_user_by(self, **kwargs) -> User:
@@ -66,6 +67,8 @@ class DB:
                 NoResultFound: If no user matches the criteria.
             """
         try:
+            if self.__session is None:
+                self.__session = self._session
             if kwargs:
                 query = self.__session.query(User).filter_by(**kwargs).one()
                 return query
