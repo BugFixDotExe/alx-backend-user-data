@@ -14,15 +14,18 @@ def main():
 
 @app.route('/users', methods=['POST'])
 def users():
-    '''
-    users: a function when given a form
-    will procceed to extract and save
-    '''
+    """
+    Endpoint to register a new user.
+
+    - Accepts email and password from form data.
+    - If the email is already registered, return an error.
+    - Otherwise, register the user and return a success message.
+    """
     email = request.form.get('email')
     password = request.form.get('password')
     try:
         is_user = AUTH.register_user(email=email, password=password)
-        return jsonify({"email": email, "message": "user created"})
+        return jsonify({"email": email, "message": "user created"}), 200
     except ValueError:
         return jsonify({"message": "email already registered"}), 400
 
