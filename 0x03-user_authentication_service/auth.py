@@ -26,6 +26,10 @@ class Auth:
         Returns:
             A User object saved to the db
         '''
+        if password is None or len(password) == 0:
+            raise ValueError
+        if email is None or len(email) == 0:
+            raise ValueError
         try:
             auth_session = self._db._session
             isUser = self._db.find_user_by(email=email)
