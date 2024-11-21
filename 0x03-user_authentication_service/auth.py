@@ -43,6 +43,26 @@ class Auth:
                 email=email, hashed_password=hashed_password)
             return saved_user
 
+    def valid_login(self, email: str, password: str) -> bool:
+        '''
+        valid_login: A method that returns a boolean
+        it serves the purpose of checking a password againt
+        it's hashed variant, using an email as the query
+        Args:
+            email(string): An email to be used for filtering
+            password(string): A non hased password
+        Returns:
+            A boolean True for match and Flase otherwise
+        '''
+        try:
+            is_user = self._db.find_user_by(email=email)
+            status = bcrypt.checkpw(
+                password=password.encode('utf-8'),
+                hashed_password=is_user.hashed_password)
+            return status
+        except NoResultFound:
+            return False
+
 
 def _hash_password(password: str) -> bytes:
     '''
