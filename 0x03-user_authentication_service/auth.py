@@ -81,7 +81,7 @@ class Auth:
                 self._db.update_user(is_user.id, session_id=session_id)
                 return session_id
         except NoResultFound:
-            return None
+            return str(None)
 
 
 def _hash_password(password: str) -> bytes:
