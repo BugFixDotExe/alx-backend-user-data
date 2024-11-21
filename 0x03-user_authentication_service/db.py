@@ -82,6 +82,7 @@ class DB:
             except NoResultFound:
                 raise NoResultFound
 
+
     def update_user(self, user_id: int, **kwargs) -> None:
         """
             Finds a user by the provided filter criteria.
