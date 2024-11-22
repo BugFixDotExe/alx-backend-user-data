@@ -104,16 +104,12 @@ class DB:
         if not kwargs:
             raise ValueError
         try:
-            for k, v in kwargs.items():
-                if not hasattr(User, k):
-                    raise ValueError
             matched_user = self.find_user_by(id=user_id)
             for key, value in kwargs.items():
-                try:
-                    if hasattr(matched_user, key):
-                        setattr(matched_user, key, value)
-                except (AttributeError, TypeError):
+                if not hasattr(User, key):
                     raise ValueError
-            self.__session.commit()
-        except (NoResultFound):
+                if hasattr(matched_user, key):
+                    setattr(matched_user, key, value)
+                self.__session.commit()
+        except (NoResultFound, AttributeError):
             raise NoResultFound

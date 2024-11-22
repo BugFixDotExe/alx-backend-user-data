@@ -32,7 +32,6 @@ class Auth:
         if email is None or len(email) == 0:
             raise ValueError
         try:
-            self._db._session
             isUser = self._db.find_user_by(email=email)
             if isUser:
                 raise ValueError(f'User {email} already exists')
