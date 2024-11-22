@@ -84,19 +84,21 @@ class DB:
 
     def update_user(self, user_id: int, **kwargs) -> None:
         """
-            Finds a user by the provided filter criteria.
+        Updates a user's attributes by their ID.
 
-            Args:
-                user_id (int): The id of the user to find.
-               kwargs (dict): A dict containing the attr(key)
-               and value to be update in the User class
+        Args:
+            user_id (int): The ID of the user to update.
+            kwargs (dict): Key-value pairs representing the
+            attributes and their new values.
 
-            Returns:
-                None
+        Returns:
+            None
 
-            Raises:
-                ValueError: If no or wrong filter criteria are provided.
-            """
+        Raises:
+            ValueError: If the user_id is not an integer,
+            no attributes are provided, or an invalid attribute is specified.
+            NoResultFound: If no user is found with the provided ID.
+        """
         if self.__session is None:
             self.__session = self._session
         if type(user_id) is not int:
@@ -110,6 +112,6 @@ class DB:
                     raise ValueError
                 if hasattr(matched_user, key):
                     setattr(matched_user, key, value)
-                self.__session.commit()
+            self.__session.commit()
         except (NoResultFound, AttributeError):
             raise NoResultFound
