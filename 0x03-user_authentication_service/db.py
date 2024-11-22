@@ -104,6 +104,9 @@ class DB:
         if not kwargs:
             raise ValueError
         try:
+            for k, v in kwargs.items():
+                if not hasattr(User, k):
+                    raise ValueError
             matched_user = self.find_user_by(id=user_id)
             for key, value in kwargs.items():
                 try:
